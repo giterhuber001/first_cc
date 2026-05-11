@@ -1,0 +1,17 @@
+{
+  "name": "每日速记",
+  "short_name": "速记",
+  "description": "快速记录日常灵感和想法",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1a2e",
+  "theme_color": "#1a1a2e",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='40' fill='%23f0a050'/><text x='50' y='65' text-anchor='middle' font-size='50' fill='white'>✎</text></svg>",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

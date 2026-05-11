@@ -1,3 +1,6 @@
+// Auto-detect API: Electron IPC bridge or HTTP (PWA)
+const notesAPI = (typeof window !== 'undefined' && window.notesAPI) ? window.notesAPI : window.api;
+
 // ── State ──
 let currentDate = '';
 let notes = [];
@@ -216,7 +219,7 @@ document.querySelector('.modal-btn.edit-btn').addEventListener('click', () => {
   async function commit() {
     const raw = ta.value.trim();
     if (!raw) { closeModal(); return; }
-    const updated = await window.notesAPI.updateNote(currentDate, modalNote.index, raw);
+    const updated = await notesAPI.updateNote(currentDate, modalNote.index, raw);
     if (updated) {
       const idx = notes.findIndex((n) => n.index === modalNote.index);
       if (idx !== -1) notes[idx] = updated;
@@ -259,12 +262,12 @@ async function deleteNoteByIdx(note) {
   }
   setTimeout(async () => {
     notes.splice(noteIdx, 1);
-    await window.notesAPI.deleteNote(currentDate, note.index);
+    await notesAPI.deleteNote(currentDate, note.index);
     renderNotes();
     lastDeleted = { note: removed, date: currentDate };
     showToast('笔记已删除', '撤销', async () => {
-      await window.notesAPI.addNote(lastDeleted.date, lastDeleted.note.text);
-      notes = await window.notesAPI.getNotes(currentDate);
+      await notesAPI.addNote(lastDeleted.date, lastDeleted.note.text);
+      notes = await notesAPI.getNotes(currentDate);
       renderNotes();
     });
   }, 150);
@@ -296,7 +299,7 @@ function updateInputState() {
 async function loadDate(dateStr) {
   currentDate = dateStr;
   dateDisplay.textContent = formatDisplay(dateStr);
-  notes = await window.notesAPI.getNotes(dateStr);
+  notes = await notesAPI.getNotes(dateStr);
   activeFilter = null;
   activeFilterEl.innerHTML = '';
   searchInput.value = '';
@@ -310,7 +313,7 @@ async function loadDate(dateStr) {
 async function addNote() {
   const text = noteInput.value.trim();
   if (!text) return;
-  const note = await window.notesAPI.addNote(currentDate, text);
+  const note = await notesAPI.addNote(currentDate, text);
   if (note) { notes.push(note); renderNotes(); }
   noteInput.value = '';
   noteInput.style.height = 'auto';
@@ -341,7 +344,7 @@ document.addEventListener('keydown', (e) => {
   if (e.ctrlKey && e.key === 't')          { e.preventDefault(); loadDate(getToday()); }
   if (e.ctrlKey && e.key === 'z' && lastDeleted) {
     e.preventDefault();
-    window.notesAPI.addNote(lastDeleted.date, lastDeleted.note.text);
+    notesAPI.addNote(lastDeleted.date, lastDeleted.note.text);
     loadDate(currentDate);
     lastDeleted = null; hideToast();
   }
@@ -387,7 +390,7 @@ function renderCalendar() {
 }
 async function loadCalendarDots() {
   try {
-    const months = await window.notesAPI.listMonths();
+    const months = await notesAPI.listMonths();
     const tm = months.find((m) => m.year === calYear && m.month === calMonth);
     if (!tm) return;
     calendarGrid.querySelectorAll('.cal-day').forEach((cell) => {
