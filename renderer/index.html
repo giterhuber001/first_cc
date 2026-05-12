@@ -3,68 +3,73 @@
 <head>
 <meta charset="UTF-8">
 <base href="/notes/">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="每日速记">
+<meta name="theme-color" content="#1a1a2e">
+<link rel="apple-touch-icon" href="icon-192.png">
 <link rel="manifest" href="manifest.json">
 <title>每日速记</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div id="toolbar">
-  <div class="date-nav">
-    <button id="btn-prev" title="前一天 Ctrl+←">&lsaquo;</button>
-    <span id="date-display"></span>
-    <button id="btn-next" title="后一天 Ctrl+→">&rsaquo;</button>
-    <button id="btn-today">今天</button>
-    <button id="btn-calendar" title="月历">📅</button>
-  </div>
-  <div class="toolbar-right">
-    <input type="text" id="search-input" placeholder="搜索 Ctrl+F" class="search-box">
-    <div id="active-filter"></div>
-  </div>
+<!-- Header -->
+<div id="header">
+  <button id="btn-prev">&lsaquo;</button>
+  <span id="date-display"></span>
+  <button id="btn-next">&rsaquo;</button>
+  <button id="btn-today" class="header-btn">今天</button>
+  <input type="text" id="search-input" placeholder="搜索..." class="search-box">
 </div>
 
-<!-- Mini Calendar -->
-<div id="calendar-panel" style="display:none;">
-  <div class="cal-nav">
-    <button id="cal-prev">&lsaquo;</button>
-    <span id="calendar-title"></span>
-    <button id="cal-next">&rsaquo;</button>
+<!-- Notes Tab -->
+<div id="tab-notes" class="tab-page">
+  <div id="input-zone">
+    <textarea id="note-input" placeholder="记下此刻的想法..." rows="1"></textarea>
+    <span id="live-time"></span>
   </div>
-  <div id="calendar-grid"></div>
+  <div id="divider"><span id="note-count"></span></div>
+  <div id="notes-grid"></div>
+</div>
+
+<!-- Calendar Tab -->
+<div id="tab-calendar" class="tab-page" style="display:none;">
+  <div class="cal-nav-header">
+    <button id="cal-prev-month">&lsaquo;</button>
+    <span id="cal-title-large">2026年5月</span>
+    <button id="cal-next-month">&rsaquo;</button>
+  </div>
+  <div id="calendar-grid-full"></div>
   <div class="cal-legend"><span class="cal-dot"></span> 有笔记</div>
+  <div id="cal-day-list"></div>
 </div>
 
-<div id="input-zone">
-  <textarea id="note-input" placeholder="写下此刻的想法...（Enter 保存）" rows="1"></textarea>
-  <span id="live-time"></span>
-</div>
-
-<div id="divider">
-  <span id="note-count"></span>
-</div>
-
-<div id="notes-grid"></div>
-
-<!-- Detail Modal -->
-<div id="modal-overlay" style="display:none;">
-  <div id="modal-card">
-    <div class="modal-header">
-      <span class="modal-time"></span>
-      <div class="modal-actions">
-        <button class="modal-btn edit-btn" title="编辑">✎</button>
-        <button class="modal-btn delete-btn" title="删除">🗑</button>
-        <button class="modal-btn close-btn" title="关闭">✕</button>
-      </div>
-    </div>
-    <div class="modal-body"></div>
-    <div class="modal-tags"></div>
+<!-- Bottom Sheet Overlay -->
+<div id="sheet-overlay" style="display:none;">
+  <div id="sheet">
+    <div class="sheet-handle"></div>
+    <div id="sheet-content"></div>
   </div>
 </div>
 
+<!-- Bottom Tab Bar -->
+<div id="tab-bar">
+  <button class="tab-btn active" data-tab="notes">
+    <span class="tab-icon">✍️</span>
+    <span class="tab-label">笔记</span>
+  </button>
+  <button class="tab-btn" data-tab="calendar">
+    <span class="tab-icon">📅</span>
+    <span class="tab-label">月历</span>
+  </button>
+</div>
+
+<!-- Active filter tag -->
+<div id="active-filter"></div>
+
+<!-- Toast -->
 <div id="toast"></div>
 
 <script src="api.js"></script>
