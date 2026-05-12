@@ -1,13 +1,14 @@
 // API wrapper — same interface as window.notesAPI (Electron IPC),
 // but uses HTTP fetch for the PWA / web version.
+// Uses relative paths — works with Nginx /notes sub-path via <base> tag.
 window.api = {
   async getNotes(dateStr) {
-    const res = await fetch(`/api/notes?date=${encodeURIComponent(dateStr)}`);
+    const res = await fetch(`api/notes?date=${encodeURIComponent(dateStr)}`);
     return res.json();
   },
 
   async addNote(dateStr, text) {
-    const res = await fetch('/api/notes', {
+    const res = await fetch('api/notes', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ date: dateStr, text }),
@@ -16,7 +17,7 @@ window.api = {
   },
 
   async updateNote(dateStr, index, text) {
-    const res = await fetch('/api/notes', {
+    const res = await fetch('api/notes', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ date: dateStr, index, text }),
@@ -25,7 +26,7 @@ window.api = {
   },
 
   async deleteNote(dateStr, index) {
-    await fetch('/api/notes', {
+    await fetch('api/notes', {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ date: dateStr, index }),
@@ -33,17 +34,17 @@ window.api = {
   },
 
   async searchNotes(keyword) {
-    const res = await fetch(`/api/search?q=${encodeURIComponent(keyword)}`);
+    const res = await fetch(`api/search?q=${encodeURIComponent(keyword)}`);
     return res.json();
   },
 
   async listMonths() {
-    const res = await fetch('/api/months');
+    const res = await fetch('api/months');
     return res.json();
   },
 
   async getRootDir() {
-    const res = await fetch('/api/root-dir');
+    const res = await fetch('api/root-dir');
     return res.text().then((t) => JSON.parse(t));
   }
 };
