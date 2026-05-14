@@ -1,6 +1,48 @@
 // ── API ──
 const notesAPI = window.notesAPI || window.api;
 
+// ── Auth ──
+const loginOverlay = $('#login-overlay');
+const loginPassword = $('#login-password');
+const loginError = $('#login-error');
+
+async function checkAuth() {
+  const token = sessionStorage.getItem('notes_token');
+  if (!token) { showLogin(); return false; }
+  const ok = await notesAPI.checkAuth();
+  if (!ok) { sessionStorage.removeItem('notes_token'); showLogin(); return false; }
+  hideLogin();
+  return true;
+}
+
+function showLogin() {
+  loginOverlay.style.display = 'flex';
+  setTimeout(() => loginPassword.focus(), 100);
+}
+
+function hideLogin() {
+  loginOverlay.style.display = 'none';
+}
+
+$('#login-submit').addEventListener('click', async () => {
+  const pwd = loginPassword.value.trim();
+  if (!pwd) return;
+  loginError.textContent = '';
+  const token = await notesAPI.login(pwd);
+  if (token) {
+    hideLogin();
+    loadDate(getToday());
+  } else {
+    loginError.textContent = '密码错误';
+    loginPassword.value = '';
+    loginPassword.focus();
+  }
+});
+
+loginPassword.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') $('#login-submit').click();
+});
+
 // ── State ──
 let currentDate = '';
 let notes = [];
@@ -274,4 +316,7 @@ document.addEventListener('keydown',e=>{
 // ── Init ──
 calDisplayYear=parseInt(getToday().split('-')[0]);
 calDisplayMonth=parseInt(getToday().split('-')[1]);
-loadDate(getToday());
+(async function(){
+  const authed = await checkAuth();
+  if (authed) loadDate(getToday());
+})();
