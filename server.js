@@ -5,10 +5,7 @@ const store = require('./notes-store');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const PASSWORD = process.env.NOTES_PASSWORD || 'daily2026';
-
-// Generate a secret token on startup
-const SECRET = crypto.randomBytes(32).toString('hex');
+const PASSWORD = process.env.NOTES_PASSWORD || 'everyday2026';
 const tokens = new Set();
 
 app.use(express.json());

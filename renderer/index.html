@@ -73,10 +73,15 @@
 <!-- Login Overlay -->
 <div id="login-overlay">
   <div id="login-box">
-    <div class="login-icon">✍️</div>
+    <div class="login-logo">
+      <span class="login-avatar">📝</span>
+    </div>
     <h2>每日速记</h2>
-    <p class="login-hint">输入密码以查看笔记</p>
-    <input type="password" id="login-password" placeholder="密码" autocomplete="off">
+    <p class="login-hint">记录日常灵感与想法</p>
+    <div class="login-input-wrap">
+      <span class="login-input-icon">🔒</span>
+      <input type="password" id="login-password" placeholder="输入密码" autocomplete="off">
+    </div>
     <button id="login-submit">进入</button>
     <p id="login-error"></p>
   </div>
