@@ -10,6 +10,14 @@ const tokens = new Set();
 
 app.use(express.json());
 
+// Handle /notes path prefix (set by Nginx proxy or direct access)
+app.use((req, _res, next) => {
+  if (req.path.startsWith('/notes')) {
+    req.url = req.url.replace(/^\/notes/, '') || '/';
+  }
+  next();
+});
+
 // Auth middleware for API routes
 function requireAuth(req, res, next) {
   const token = (req.headers.authorization || '').replace('Bearer ', '') || req.query.token;
